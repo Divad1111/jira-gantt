@@ -1,0 +1,28 @@
+
+> filter-gantt-gadget-frontend@1.0.0 test
+> node --test test/*.test.js
+
+✔ serial Jira pagination honors server page size and cap with exact JQL (126.41ms)
+✔ empty pages terminate and truthfully report incomplete result (3.5332ms)
+✔ permission revoked after paging fails instead of returning stale issues (4.6091ms)
+✔ bad IDs rejected before fetch; contexts cannot escape same origin (1.5835ms)
+✔ abort cancels an in-flight query (2.2429ms)
+✔ invalid pagination offsets cannot cause infinite repeated reads (5.607ms)
+✔ inclusive same-day dates occupy one local calendar day (14.2072ms)
+✔ calendar next day preserves midnight across DST in America/New_York (1.1972ms)
+✔ DateTime converted using Jira user timezone, date-only values do not drift (85.021ms)
+✔ missing and invalid schedules are classified without invented dates (1.653ms)
+✔ parents and dependencies only reference scheduled visible results, cycles are broken (2.5624ms)
+✔ estimate progress is clamped and missing estimates remain unknown (5.0455ms)
+✔ configuration rejects invalid caps, fields and enums; strips private keys (2.4931ms)
+✔ IDs and links are strictly constrained; summaries safely escaped (1.995ms)
+✔ only visible date metadata is selectable (2.3617ms)
+✔ writable date mapping supports Roadmaps while excluding system timestamps and unknown plugins (2.6122ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 550.174

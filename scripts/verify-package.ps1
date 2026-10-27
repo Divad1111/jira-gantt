@@ -1,4 +1,4 @@
-param([string]$JarPath = (Join-Path $PSScriptRoot '..\target\filter-gantt-gadget-1.0.3.jar'))
+param([string]$JarPath = (Join-Path $PSScriptRoot '..\target\filter-gantt-gadget-1.3.1.jar'))
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $resolvedJar = (Resolve-Path -LiteralPath $JarPath).Path
@@ -10,7 +10,10 @@ try {
         'soy/filter-gantt.soy', 'frontend/dashboard-item.js', 'frontend/dashboard-item-min.js',
         'frontend/filter-gantt.css', 'frontend/filter-gantt-min.css', 'frontend/licenses/dhtmlx-gantt-MIT.txt',
         'com/qixia/jira/filtergantt/rest/PersonalResource.class', 'com/qixia/jira/filtergantt/rest/FilterResource.class',
-        'com/qixia/jira/filtergantt/ao/PersonalGanttPreference.class'
+        'com/qixia/jira/filtergantt/ao/PersonalGanttPreference.class',
+        'com/qixia/jira/filtergantt/rest/ScheduleResource.class', 'com/qixia/jira/filtergantt/ScheduleService.class',
+        'com/qixia/jira/filtergantt/WorkCalendarService.class', 'com/qixia/jira/filtergantt/ao/GlobalWorkCalendar.class',
+        'com/qixia/jira/filtergantt/rest/WorkCalendarResource.class', 'com/qixia/jira/filtergantt/WorkScheduler.class', 'com/qixia/jira/filtergantt/ao/GadgetSchedule.class'
     )
     foreach ($entry in $required) { if ($null -eq $archive.GetEntry($entry)) { throw "Missing package entry: $entry" } }
     function Read-Entry([string]$name) {
@@ -35,10 +38,18 @@ try {
     foreach ($module in @('dashboard-item', 'web-resource', 'rest', 'rest-migration', 'ao')) {
         if (!$descriptor.'atlassian-plugin'.$module) { throw "Missing Jira module $module" }
     }
+    foreach ($entity in @('com.qixia.jira.filtergantt.ao.GadgetSchedule','com.qixia.jira.filtergantt.ao.GlobalWorkCalendar')) {
+        if ($descriptor.'atlassian-plugin'.ao.entity -notcontains $entity) { throw "Missing schedule AO entity: $entity" }
+    }
+    $components = Read-Entry 'META-INF/plugin-components/component'
+    foreach ($component in @('com.qixia.jira.filtergantt.WorkCalendarService', 'com.qixia.jira.filtergantt.rest.WorkCalendarResource','com.qixia.jira.filtergantt.ScheduleService', 'com.qixia.jira.filtergantt.rest.ScheduleResource')) {
+        if (!$components.Contains($component)) { throw "Schedule service missing from Spring index: $component" }
+    }
     if ((Read-Entry 'frontend/licenses/dhtmlx-gantt-MIT.txt') -notmatch 'The MIT License') { throw 'MIT license missing' }
     if ((Read-Entry 'frontend/dashboard-item.js') -notmatch "define\('filter-gantt/dashboard-item'") { throw 'Named AMD module missing' }
     $classCount = 0
     foreach ($entry in $archive.Entries) {
+        if ($entry.FullName -match '/(PlanStore|PlanResource|PlanSchedule|GanttPlan|GanttPlanTask)(\$[^/]*)?\.class$') { throw "Removed plan management class remains in package: $($entry.FullName)" }
         if ($entry.FullName -match '^com/atlassian/.*\.class$|\.jar$') { throw "Host/nested library unexpectedly bundled: $($entry.FullName)" }
         if ($entry.FullName -match '\.class$') {
             $stream = $entry.Open(); $bytes = [byte[]]::new(8)

@@ -45,3 +45,62 @@
 .filter-gantt .gantt_marker .gantt_marker_content { background: #de350b; }
 .filter-gantt .fg-today-marker { position: absolute; top: 0; width: 2px; background: #de350b; opacity: .7; z-index: 2; pointer-events: none; }
 @media (max-width: 560px) { .filter-gantt .fg-field { grid-template-columns: 1fr; gap: 3px; } }
+.filter-gantt .fg-schedule-toolbar {display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:10px 0;}
+.filter-gantt .fg-schedule-message {flex:1 1 260px;min-width:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.filter-gantt .fg-schedule-access {color:#5e6c84;font-size:12px;}
+.filter-gantt .fg-schedule-controls {display:flex;align-items:center;gap:8px;margin-left:auto;}
+.filter-gantt .fg-link-button {border:0;color:#0052cc;padding:0;min-height:24px;text-decoration:underline;}
+.filter-gantt .fg-multiselect {position:relative;min-width:120px;}
+.filter-gantt .fg-multi-trigger {display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.filter-gantt .fg-multi-trigger::after {content:'▾';color:#6b778c;}
+.filter-gantt .fg-multi-trigger[aria-expanded=true] {border-color:#0052cc;box-shadow:0 0 0 1px #0052cc;}
+.filter-gantt .fg-multi-panel {position:absolute;z-index:1000;right:0;top:calc(100% + 6px);width:260px;max-width:calc(100vw - 40px);padding:10px;background:#fff;border:1px solid #dfe1e6;border-radius:6px;box-shadow:0 8px 20px #091e4233;}
+.filter-gantt .fg-multi-panel > input {width:100%;}
+.filter-gantt .fg-multi-actions {display:flex;justify-content:space-between;margin:6px 0;}
+.filter-gantt .fg-multi-actions button {border:0;min-height:24px;padding:2px 4px;color:#0052cc;font-size:12px;}
+.filter-gantt .fg-multi-options {max-height:220px;overflow:auto;}
+.filter-gantt .fg-multi-option {display:flex;align-items:center;gap:8px;padding:7px 6px;border-radius:4px;cursor:pointer;}
+.filter-gantt .fg-multi-option:hover {background:#f4f5f7;}
+.filter-gantt .fg-multi-option > span {flex:1;min-width:0;overflow-wrap:anywhere;}
+.filter-gantt .fg-multi-option small {color:#6b778c;}
+.filter-gantt .fg-multi-empty {padding:12px;color:#6b778c;text-align:center;}
+.filter-gantt .fg-editable.gantt_task_line {cursor:grab;}
+.filter-gantt .fg-editable.gantt_task_line:active {cursor:grabbing;}
+.filter-gantt .fg-editable .gantt_task_drag {display:block!important;width:8px;opacity:.8;cursor:ew-resize;}
+.filter-gantt input[type=checkbox] {min-height:initial;vertical-align:middle;}
+.filter-gantt .fg-dialog {width:min(1100px,94vw);max-height:88vh;overflow:auto;padding:20px;border:1px solid #b3bac5;border-radius:8px;color:#172b4d;background:#fff;box-shadow:0 12px 40px #091e4240;font:inherit;}
+.filter-gantt .fg-dialog::backdrop {background:#091e4266;}
+.filter-gantt .fg-dialog h3 {margin:0 0 14px;}
+.filter-gantt .fg-dialog textarea {font:inherit;width:100%;border:1px solid #b3bac5;border-radius:4px;padding:8px;resize:vertical;background:#fff;color:#172b4d;}
+.filter-gantt .fg-schedule-fields {display:grid;gap:8px;}
+.filter-gantt .fg-schedule-task-list {margin:16px 0;max-height:48vh;overflow:auto;padding:6px;}
+.filter-gantt .fg-person-heading {margin:12px 0 8px;padding:8px 12px;background:#f4f5f7;border-radius:4px;font-size:14px;}
+.filter-gantt .fg-person-heading:first-child {margin-top:0;}
+.filter-gantt .fg-schedule-task {display:grid;grid-template-columns:minmax(160px,2fr) 110px minmax(170px,1fr) 64px 148px 76px;gap:14px;align-items:center;padding:14px 12px;margin-bottom:10px;border:1px solid #dfe1e6;border-radius:6px;}
+.filter-gantt .fg-schedule-task > * {min-width:0;}
+.filter-gantt .fg-schedule-task[draggable=true] {cursor:grab;}
+.filter-gantt .fg-task-title {overflow-wrap:anywhere;}
+.filter-gantt .fg-task-input {display:grid;gap:6px;cursor:default;}
+.filter-gantt .fg-task-input > span {font-size:12px;color:#5e6c84;}
+.filter-gantt .fg-task-input input {width:100%;min-width:0;}
+.filter-gantt .fg-row-moves {display:flex;gap:12px;}
+.filter-gantt .fg-row-moves button {width:32px;flex-shrink:0;padding:5px;}
+.filter-gantt .fg-person-select {min-width:0;}
+.filter-gantt .fg-assignee-panel {position:fixed;z-index:1200;overflow:auto;padding:8px;border:1px solid #b3bac5;border-radius:6px;box-shadow:0 8px 24px #091e4233;background:#fff;cursor:default;}
+.filter-gantt .fg-assignee-panel [role=listbox] {max-height:200px;}
+.filter-gantt .fg-assignee-panel small[role=status] {display:block;color:#5e6c84;}
+.filter-gantt .fg-schedule-dates {font-size:12px;color:#5e6c84;}
+.filter-gantt .fg-day {display:inline-flex;align-items:center;gap:6px;margin:8px 18px 8px 0;}
+.filter-gantt .fg-calendar-days {display:flex;flex-wrap:wrap;gap:6px;}
+.filter-gantt .fg-dialog .fg-field {margin:16px 4px;gap:16px;}
+.filter-gantt .fg-dialog fieldset {padding:16px;}
+.filter-gantt .fg-dialog .fg-actions {justify-content:flex-end;gap:12px;margin:18px 4px 4px;}
+.filter-gantt .fg-note {cursor:pointer;}
+.filter-gantt .fg-note-text {white-space:pre-wrap;overflow-wrap:anywhere;}
+.filter-gantt .fg-resource-link .gantt_line_wrapper div {border:1px dashed #8777d9;background:transparent;}
+@media(max-width:1000px){.filter-gantt .fg-schedule-task{grid-template-columns:110px minmax(170px,1fr) 64px 148px 76px}.filter-gantt .fg-task-title{grid-column:1/-1}}
+@media(max-width:700px){.filter-gantt .fg-schedule-task{grid-template-columns:minmax(80px,1fr) minmax(120px,1.5fr)}.filter-gantt .fg-task-title{grid-column:1/-1}.filter-gantt .fg-row-moves{grid-column:2}.filter-gantt .fg-schedule-controls{flex-wrap:wrap}}
+
+/* Reserve one status line so a save does not move the chart vertically. */
+.filter-gantt .fg-sync-report {min-height:20px;margin:6px 0;}
+.filter-gantt .fg-sync-report[hidden] {display:block!important;visibility:hidden;}

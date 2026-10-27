@@ -1,0 +1,53 @@
+
+> filter-gantt-gadget-frontend@1.0.0 test:browser
+> playwright test
+
+[WebServer] (node:51264) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 37 tests using 1 worker
+
+(node:14040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:14040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 test\browser\gadget.spec.js:18:1 › three real Community Gantt instances render, isolate zoom, escape XSS and destroy cleanly (3.9s)
+  ok  2 test\browser\gadget.spec.js:41:1 › A and B personal views persist independently on the same shared gadget and across browser contexts (5.5s)
+  ok  3 test\browser\gadget.spec.js:81:1 › revoked permission clears all old chart data and names (1.6s)
+  ok  4 test\browser\gadget.spec.js:97:1 › viewer cannot configure shared preferences but can choose personal filter; fixed mode has no picker (2.8s)
+  ok  5 test\browser\gadget.spec.js:125:1 › shared config saves only allowlisted instance fields and root context path works (2.3s)
+  ok  6 test\browser\gadget.spec.js:141:1 › readonly chart does not open a lightbox or issue write request (1.7s)
+  ok  7 test\browser\gadget.spec.js:158:1 › mock visual capture (1.8s)
+  ok  8 test\browser\gadget.spec.js:167:1 › rapid personal changes persist the newest choice in order (3.0s)
+  ok  9 test\browser\gadget.spec.js:185:1 › 1000 issue cap is enforced for 1200 results (2.2s)
+MOCK_PERF five gadgets × 500 issues: 3060 ms (local Chrome/mock REST)
+  ok 10 test\browser\gadget.spec.js:197:1 › five gadgets with 500 issues remain isolated and render without errors (3.8s)
+  ok 11 test\browser\gadget.spec.js:211:1 › manual refresh recovers after failed personal save (2.3s)
+  ok 12 test\browser\gadget.spec.js:232:1 › removed date field is detected on refresh and old tasks disappear (2.1s)
+  ok 13 test\browser\gadget.spec.js:248:1 › boolean configured flag loads saved filter and false still shows setup hint (1.5s)
+  ok 14 test\browser\gadget.spec.js:266:1 › single dropdown searches, deduplicates and applies a shared default after saving (3.4s)
+  ok 15 test\browser\gadget.spec.js:293:1 › picker supports keyboard, empty search, reset and failed search (4.3s)
+  ok 16 test\browser\in-place-sync.spec.js:97:1 › successive move and resize reuse the chart, preserve filters and collapsed rows, refresh tokens without searching all issues (4.0s)
+  ok 17 test\browser\in-place-sync.spec.js:160:1 › a partially failed cascade reconciles saved and failed tasks in the same chart (2.7s)
+  ok 18 test\browser\in-place-sync.spec.js:181:1 › a lost apply response reads actual Jira values without repeating the write or recreating the chart (3.0s)
+  ok 19 test\browser\in-place-sync.spec.js:205:1 › unavailable readback keeps the current view and blocks additional edits until manual refresh (2.6s)
+  ok 20 test\browser\in-place-sync.spec.js:240:1 › scroll position and chart position remain stable while a moved task and its successors save (3.2s)
+  ok 21 test\browser\scheduling-ui.spec.js:26:1 › person groups sort automatically, manual order is retained within each group and cross-person dragging is ignored (2.7s)
+  ok 22 test\browser\scheduling-ui.spec.js:69:1 › one editable people dropdown searches 100 users with one character, pages options and supports keyboard selection (3.0s)
+  ok 23 test\browser\scheduling-ui.spec.js:125:1 › unselected search text cannot silently schedule the previous assignee and Escape restores selection (2.0s)
+  ok 24 test\browser\scheduling-ui.spec.js:150:1 › calendar is a separate global setting shared by gadgets and scheduling uses the saved holidays (2.8s)
+  ok 25 test\browser\scheduling-ui.spec.js:208:1 › nonadministrators can view the global calendar but cannot edit it through UI or a forged request (2.0s)
+  ok 26 test\browser\scheduling-ui.spec.js:243:1 › calendar changes invalidate an existing preview before any Jira update (2.7s)
+  ok 27 test\browser\scheduling-ui.spec.js:275:1 › desktop and narrow task forms leave room for focus outlines without intersecting adjacent controls (2.5s)
+  ok 28 test\browser\synchronization.spec.js:46:1 › search timestamps lose milliseconds while actual issue snapshots preserve local assignee and estimate edits (2.4s)
+  ok 29 test\browser\synchronization.spec.js:85:1 › no plan management, reorder tasks, preview then write Jira dates and estimates, reload reads Jira (3.1s)
+  ok 30 test\browser\synchronization.spec.js:161:1 › double click updates original estimate, start date and Jira comment, reads them again after reload (2.6s)
+  ok 31 test\browser\synchronization.spec.js:198:1 › moving and right resizing bars write Jira and cascade; resource filtering does not update issues (3.5s)
+  ok 32 test\browser\synchronization.spec.js:240:1 › other viewer is readonly and forged sync requests are denied (1.9s)
+  ok 33 test\browser\synchronization.spec.js:272:1 › searching an assignable user and selecting them writes the Jira assignee (3.1s)
+  ok 34 test\browser\synchronization.spec.js:297:1 › partial Jira failure lists successful and failed tasks then refreshes real values (2.1s)
+  ok 35 test\browser\synchronization.spec.js:310:1 › concurrent update rejects preview without any Jira write (2.4s)
+  ok 36 test\browser\synchronization.spec.js:332:1 › people and status dropdowns search and combine without resizing the toolbar or updating Jira (4.5s)
+  ok 37 test\browser\synchronization.spec.js:408:1 › invalid legacy date mapping explains disabled controls and links to a valid repair (2.0s)
+
+  37 passed (1.9m)

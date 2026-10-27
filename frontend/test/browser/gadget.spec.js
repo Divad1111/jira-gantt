@@ -54,7 +54,7 @@ test('viewer cannot configure shared preferences but can choose personal filter;
   await expect(page.locator('.gantt_container')).toHaveCount(1); await expect(page.locator('.fg-select-panel')).toHaveCount(0);
 });
 test('shared config saves only allowlisted instance fields and root context path works', async ({ page }) => {
-  await mount(page, 1, {}, '/'); await page.getByRole('button', { name: '配置', exact: true }).click();
+  await mount(page, 1, {}, '/'); await page.evaluate(() => window.items[0].instance.renderEdit(window.items[0].host, window.items[0].preferences));
   await expect(page.locator('.fg-config')).toBeVisible();
   await page.locator('[name=heightPx]').fill('450'); await page.getByRole('button', { name: '保存共享配置' }).click();
   await expect(page.locator('.gantt_container')).toHaveCount(1);
@@ -127,7 +127,7 @@ test('removed date field is detected on refresh and old tasks disappear', async 
 test('boolean configured flag loads saved filter and false still shows setup hint', async ({ page }) => {
   await mount(page, 1, { isConfigured: true, showHierarchy: true, showDependencies: false });
   await expect(page.locator('.gantt_container')).toHaveCount(1);
-  await page.getByRole('button', { name: '配置', exact: true }).click();
+  await page.evaluate(() => window.items[0].instance.renderEdit(window.items[0].host, window.items[0].preferences));
   await expect(page.locator('[name=showHierarchy]')).toBeChecked();
   await expect(page.locator('[name=showDependencies]')).not.toBeChecked();
   await page.evaluate(() => window.items[0].instance.render(window.items[0].host, {isConfigured: false}));
@@ -137,7 +137,7 @@ test('boolean configured flag loads saved filter and false still shows setup hin
 
 test('single dropdown searches, deduplicates and applies a shared default after saving', async ({ page }) => {
   await mount(page);
-  await page.getByRole('button', { name: '配置', exact: true }).click();
+  await page.evaluate(() => window.items[0].instance.renderEdit(window.items[0].host, window.items[0].preferences));
   const picker = page.getByRole('combobox', { name: '默认筛选器', exact: true });
   await picker.click();
   await expect(page.getByRole('listbox').getByRole('option')).toHaveCount(3);

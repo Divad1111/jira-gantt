@@ -27,7 +27,13 @@ export class JiraClient {
         headers: { Accept: 'application/json', ...(method !== 'GET' ? { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } : {}) },
         ...(body !== undefined ? { body: JSON.stringify(body) } : {})
       });
-      if (!response.ok) throw new HttpError(response.status, `Jira 请求失败 (${response.status})`, +(response.headers.get('Retry-After') ?? 0));
+      if (!response.ok) {
+        let message = `Jira 请求失败 (${response.status})`;
+        if (path.startsWith('/rest/filter-gantt/')) {
+          try { const body = await response.json(); if (typeof body.message === 'string') message = body.message; } catch { }
+        }
+        throw new HttpError(response.status, message, +(response.headers.get('Retry-After') ?? 0));
+      }
       if (response.status === 204) return null;
       return await response.json();
     } finally { clearTimeout(timer); signal?.removeEventListener('abort', relay); }
@@ -36,6 +42,13 @@ export class JiraClient {
   filter(filterId) { return this.get(`/rest/api/2/filter/${id(filterId)}`); }
   fields() { return this.get('/rest/api/2/field'); }
   me() { return this.get('/rest/api/2/myself'); }
+  schedule(gadgetId, filterId) { return this.get(`/rest/filter-gantt/1.0/schedule/${id(gadgetId)}?filterId=${id(filterId)}`); }
+  scheduleSource(gadgetId, filterId, issueIds) { return this.request(`/rest/filter-gantt/1.0/schedule/${id(gadgetId)}/source`,{method:'POST',body:{filterId,issueIds}}); }
+  syncSchedule(gadgetId, body, preview = false) { return this.request(`/rest/filter-gantt/1.0/schedule/${id(gadgetId)}${preview ? '/preview' : ''}`, { method: 'POST', body }); }
+  workCalendar() { return this.get('/rest/filter-gantt/1.0/calendar'); }
+  saveWorkCalendar(body) { return this.request('/rest/filter-gantt/1.0/calendar',{method:'PUT',body}); }
+  assignees(issueKey, query, startAt=0, signal) { return this.request(`/rest/api/2/user/assignable/search?${new URLSearchParams({ issueKey, username: query, startAt:String(startAt), maxResults: '30' })}`,{signal}); }
+  comments(issueKey) { return this.get(`/rest/api/2/issue/${encodeURIComponent(issueKey)}/comment?maxResults=5`); }
   personal(gadgetId) { return this.get(`/rest/filter-gantt/1.0/personal/${id(gadgetId)}`); }
   savePersonal(gadgetId, value) { return this.request(`/rest/filter-gantt/1.0/personal/${id(gadgetId)}`, { method: 'PUT', body: value }); }
   resetPersonal(gadgetId) { return this.request(`/rest/filter-gantt/1.0/personal/${id(gadgetId)}`, { method: 'DELETE' }); }

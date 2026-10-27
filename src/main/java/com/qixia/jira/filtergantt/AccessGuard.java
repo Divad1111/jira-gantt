@@ -43,6 +43,12 @@ public class AccessGuard {
     public boolean selectable(PortletConfiguration gadget) {
         return "VIEWER_SELECTABLE".equals(gadget.getUserPrefs().getOrDefault("mode", "VIEWER_SELECTABLE"));
     }
+    public boolean ownsDashboard(ApplicationUser user, long gadgetId) {
+        PortletConfiguration gadget = gadget(user, gadgetId);
+        JiraServiceContextImpl context = new JiraServiceContextImpl(user);
+        var page = pages.getPortalPage(context, gadget.getDashboardPageId());
+        return page != null && page.getOwner() != null && user.getKey().equals(page.getOwner().getKey());
+    }
     public SearchRequest filter(ApplicationUser user, long filterId) {
         JiraServiceContextImpl context = new JiraServiceContextImpl(user);
         SearchRequest filter = filters.getFilter(context, filterId);

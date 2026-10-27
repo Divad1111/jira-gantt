@@ -35,6 +35,10 @@ export function dateFields(fields) {
     /:(datepicker|datetime)$/.test(f.schema?.custom ?? '')).filter(f =>
     /^(duedate|created|updated|customfield_\d+)$/.test(f.id));
 }
+export function writableDateFields(fields) {
+  const types=new Set(['com.atlassian.jira.plugin.system.customfieldtypes:datepicker','com.atlassian.jira.plugin.system.customfieldtypes:datetime','com.atlassian.jpo:jpo-custom-field-baseline-start','com.atlassian.jpo:jpo-custom-field-baseline-end']);
+  return dateFields(fields).filter(f=>f.id==='duedate'||types.has(f.schema?.custom));
+}
 
 function localDate(y, m, d) {
   const value = new Date(0);
@@ -89,8 +93,8 @@ export function mapIssues(issues, c, contextPath, timeZone) {
     const f = issue.fields ?? {};
     const task = {
       id: String(issue.id), key: String(issue.key), text: String(f.summary ?? ''),
-      href: browseHref(issue.key, contextPath), assignee: f.assignee?.displayName ?? '未分配',
-      status: f.status?.name ?? '未知状态', statusCategory: f.status?.statusCategory?.key ?? 'undefined',
+      href: browseHref(issue.key, contextPath), assignee: f.assignee?.displayName ?? '未分配', assigneeKey: f.assignee?.key ?? f.assignee?.name ?? '',
+      status: f.status?.name ?? '未知状态', statusId: String(f.status?.id ?? f.status?.name ?? ''), statusCategory: f.status?.statusCategory?.key ?? 'undefined',
       parentId: f.parent?.id ? String(f.parent.id) : null, progress: null, issueLinks: f.issuelinks ?? []
     };
     if (Number.isFinite(f.timeoriginalestimate) && f.timeoriginalestimate > 0 && Number.isFinite(f.timeestimate) && f.timeestimate >= 0) {

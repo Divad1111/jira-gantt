@@ -1,0 +1,37 @@
+
+> filter-gantt-gadget-frontend@1.0.0 test:browser
+> playwright test
+
+[WebServer] (node:26896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 21 tests using 1 worker
+
+(node:46800) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46800) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 test\browser\gadget.spec.js:18:1 › three real Community Gantt instances render, isolate zoom, escape XSS and destroy cleanly (2.9s)
+  ok  2 test\browser\gadget.spec.js:41:1 › A and B personal views persist independently on the same shared gadget and across browser contexts (4.3s)
+  ok  3 test\browser\gadget.spec.js:81:1 › revoked permission clears all old chart data and names (1.3s)
+  ok  4 test\browser\gadget.spec.js:97:1 › viewer cannot configure shared preferences but can choose personal filter; fixed mode has no picker (1.9s)
+  ok  5 test\browser\gadget.spec.js:125:1 › shared config saves only allowlisted instance fields and root context path works (1.8s)
+  ok  6 test\browser\gadget.spec.js:141:1 › readonly chart does not open a lightbox or issue write request (1.5s)
+  ok  7 test\browser\gadget.spec.js:158:1 › mock visual capture (2.0s)
+  ok  8 test\browser\gadget.spec.js:167:1 › rapid personal changes persist the newest choice in order (2.4s)
+  ok  9 test\browser\gadget.spec.js:185:1 › 1000 issue cap is enforced for 1200 results (1.5s)
+MOCK_PERF five gadgets × 500 issues: 2348 ms (local Chrome/mock REST)
+  ok 10 test\browser\gadget.spec.js:197:1 › five gadgets with 500 issues remain isolated and render without errors (2.9s)
+  ok 11 test\browser\gadget.spec.js:211:1 › manual refresh recovers after failed personal save (1.7s)
+  ok 12 test\browser\gadget.spec.js:232:1 › removed date field is detected on refresh and old tasks disappear (1.5s)
+  ok 13 test\browser\gadget.spec.js:248:1 › boolean configured flag loads saved filter and false still shows setup hint (1.4s)
+  ok 14 test\browser\gadget.spec.js:266:1 › single dropdown searches, deduplicates and applies a shared default after saving (2.6s)
+  ok 15 test\browser\gadget.spec.js:293:1 › picker supports keyboard, empty search, reset and failed search (3.5s)
+  ok 16 test\browser\plans.spec.js:43:1 › create, reorder, calendar, preview, save and reload independent plan without issue writes (3.0s)
+  ok 17 test\browser\plans.spec.js:102:1 › owner double clicks to edit notes and estimate; drag cascades then saves; resource filter only changes visibility (2.9s)
+  ok 18 test\browser\plans.spec.js:165:1 › shared viewer is readonly, cannot forge save, can create private copy invisible to creator (4.2s)
+  ok 19 test\browser\plans.spec.js:222:1 › stale plan save reports conflict and retains unsaved edits (2.2s)
+  ok 20 test\browser\plans.spec.js:254:1 › right edge resize updates working estimate and keeps later task in sequence (3.0s)
+  ok 21 test\browser\plans.spec.js:280:1 › permission lost during save clears chart, notes and draft instead of retaining private content (2.0s)
+
+  21 passed (57.6s)

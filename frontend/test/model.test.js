@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { config, DEFAULTS, id, calendarDate, exclusiveEnd, mapIssues, escapeHtml, dateFields } from '../src/model.js';
+import { config, DEFAULTS, id, calendarDate, exclusiveEnd, mapIssues, escapeHtml, dateFields, writableDateFields } from '../src/model.js';
 
 const c = config({ ...DEFAULTS, startDateFieldId: 'customfield_10000' });
 const issue = (n = '1', fields = {}) => ({ id: n, key: `TEST-${n}`, fields: {
@@ -58,4 +58,8 @@ test('IDs and links are strictly constrained; summaries safely escaped', () => {
 });
 test('only visible date metadata is selectable', () => {
   assert.deepEqual(dateFields([{ id: 'duedate', schema: { type: 'date' } }, { id: 'customfield_1', schema: { custom: 'com.atlassian.jira.plugin.system.customfieldtypes:datetime' } }, { id: 'description', schema: { type: 'string' } }]).map(f => f.id), ['duedate', 'customfield_1']);
+});
+test('writable date mapping supports Roadmaps while excluding system timestamps and unknown plugins',()=>{
+  const fields=[{id:'created',schema:{type:'datetime'}},{id:'duedate',schema:{type:'date'}},{id:'customfield_1',schema:{type:'date',custom:'com.atlassian.jpo:jpo-custom-field-baseline-start'}},{id:'customfield_2',schema:{type:'date',custom:'com.atlassian.jpo:jpo-custom-field-baseline-end'}},{id:'customfield_3',schema:{type:'date',custom:'vendor:unknown'}}];
+  assert.deepEqual(writableDateFields(fields).map(f=>f.id),['duedate','customfield_1','customfield_2']);
 });

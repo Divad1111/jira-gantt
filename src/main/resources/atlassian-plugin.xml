@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <atlassian-plugin key="${atlassian.plugin.key}" name="Filter Gantt Gadget" plugins-version="2">
   <plugin-info>
-    <description>Read-only Saved Filter Gantt with private viewer preferences.</description>
+    <description>Saved Filter Gantt with scheduling updates synchronized to Jira issues.</description>
     <version>${project.version}</version><vendor name="Qixia"/>
     <param name="atlassian-data-center-status">compatible</param>
   </plugin-info>
@@ -26,5 +26,7 @@
   <rest-migration key="filter-gantt-rest-v2"><rest-v2/></rest-migration>
   <ao key="filter-gantt-ao" namespace="filter-gantt">
     <entity>com.qixia.jira.filtergantt.ao.PersonalGanttPreference</entity>
+    <entity>com.qixia.jira.filtergantt.ao.GadgetSchedule</entity>
+    <entity>com.qixia.jira.filtergantt.ao.GlobalWorkCalendar</entity>
   </ao>
 </atlassian-plugin>

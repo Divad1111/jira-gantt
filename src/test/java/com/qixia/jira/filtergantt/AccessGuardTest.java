@@ -33,6 +33,14 @@ public class AccessGuardTest {
     @Test public void missingSessionIsUnauthorized() {
         when(auth.getLoggedInUser()).thenReturn(null); assertStatus(401, () -> guard.currentUser());
     }
+    @Test public void writeOwnershipComesFromDashboardNotClientPreferences() {
+        var owner=mock(ApplicationUser.class);
+        var page=com.atlassian.jira.portal.PortalPage.id(20L).name("dashboard").owner(owner).build();
+        when(pages.getPortalPage(any(),eq(20L))).thenReturn(page);
+        when(user.getKey()).thenReturn("viewer");when(owner.getKey()).thenReturn("creator");assertFalse(guard.ownsDashboard(user,10));
+        when(owner.getKey()).thenReturn("viewer");assertTrue(guard.ownsDashboard(user,10));
+        when(pages.getPortalPage(any(),eq(20L))).thenReturn(com.atlassian.jira.portal.PortalPage.id(20L).name("system").systemDashboard().build());assertFalse(guard.ownsDashboard(user,10));
+    }
     @Test public void inactiveUserIsUnauthorized() {
         when(user.isActive()).thenReturn(false); assertStatus(401, () -> guard.currentUser());
     }

@@ -25,6 +25,8 @@ UPM 安装/卸载、Dashboard Item/Soy/AMD 实际加载、Spring/OSGi 服务解�
 
 ## 官方依据
 
+1.2.1 另核对实际安装的 Jira 10.3.18 `portfolio-plugin-10.3.18.jar`：Target start/end 对应 `com.atlassian.jpo:jpo-custom-field-baseline-start` / `...-end`，继承 DateCFType；其校验使用 DATE_PICKER 与 UTC 日期格式器。因此 IssueService 参数沿用 Jira 本地日期选择器格式，不套用 Cloud REST 的 ISO 参数格式。此核对不依赖 Roadmaps 的内部 Java 包作为插件依赖，仅识别公开字段类型 key。
+
 - [Dashboard Item 模块、AMD 生命周期和 Preferences API](https://developer.atlassian.com/server/jira/platform/dashboard-item-module/)
 - [Platform 7 迁移入口](https://developer.atlassian.com/platform/marketplace/dc-apps-platform-7/)
 - [Secure Endpoint Defaults](https://developer.atlassian.com/platform/marketplace/dc-apps-platform-7-preparing-for-secure-endpoints/)

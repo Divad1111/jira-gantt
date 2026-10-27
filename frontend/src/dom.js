@@ -4,7 +4,7 @@ export function el(tag, attrs = {}, ...children) {
     if (value == null) continue;
     if (key === 'className') node.className = value;
     else if (key.startsWith('on')) node.addEventListener(key.slice(2).toLowerCase(), value);
-    else if (key === 'checked') node.checked = value;
+    else if (['checked', 'disabled', 'hidden', 'required', 'multiple', 'readOnly'].includes(key)) node[key] = Boolean(value);
     else node.setAttribute(key, String(value));
   }
   node.append(...children.filter(c => c != null).map(c => typeof c === 'string' ? document.createTextNode(c) : c));

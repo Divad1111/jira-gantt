@@ -1,0 +1,21 @@
+
+> filter-gantt-gadget-frontend@1.0.0 test:browser
+> playwright test plans.spec.js
+
+[WebServer] (node:54852) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:31748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:31748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 test\browser\plans.spec.js:43:1 › create, reorder, calendar, preview, save and reload independent plan without issue writes (4.1s)
+  ok 2 test\browser\plans.spec.js:102:1 › owner double clicks to edit notes and estimate; drag cascades then saves; resource filter only changes visibility (3.2s)
+  ok 3 test\browser\plans.spec.js:165:1 › shared viewer is readonly, cannot forge save, can create private copy invisible to creator (4.3s)
+  ok 4 test\browser\plans.spec.js:222:1 › stale plan save reports conflict and retains unsaved edits (2.0s)
+  ok 5 test\browser\plans.spec.js:254:1 › right edge resize updates working estimate and keeps later task in sequence (2.8s)
+  ok 6 test\browser\plans.spec.js:280:1 › permission lost during save clears chart, notes and draft instead of retaining private content (2.3s)
+
+  6 passed (27.6s)
