@@ -5,7 +5,7 @@ async function auto(page){
   await page.getByRole('button',{name:'自动排期',exact:true}).click();const dialog=page.getByRole('dialog',{name:'自动排期',exact:true});
   await dialog.getByLabel('排期开始日期').fill('2026-10-30');await dialog.getByLabel('DEMO-1 预估时间',{exact:true}).fill('6h');await dialog.getByLabel('DEMO-2 预估时间',{exact:true}).fill('4h');
   await dialog.getByRole('button',{name:'自动排期',exact:true}).click();await expect(dialog.locator('.fg-schedule-dates').nth(1)).toContainText('2026-11-02');
-  await dialog.getByRole('button',{name:'应用并同步到 Jira'}).click();await expect(dialog).toHaveCount(0);await expect(page.locator('.fg-schedule-access')).toContainText('同步到 Jira');
+  await dialog.getByRole('button',{name:'应用并同步到 Jira'}).click();await expect(dialog).toHaveCount(0);await expect(page.getByRole('button',{name:'自动排期',exact:true})).toBeEnabled();await expect(page.locator('.fg-schedule-access')).toContainText('同步到 Jira');
 }
 async function issue(page,id){return page.evaluate(async id=>(await fetch(`/jira/rest/api/2/issue/DEMO-${id}`)).json(),id);}
 
@@ -42,13 +42,26 @@ test('double click updates original estimate, start date and Jira comment, reads
 });
 
 test('moving and right resizing bars write Jira and cascade; resource filtering does not update issues',async({page})=>{
-  await mount(page);await auto(page);await page.getByLabel('时间刻度').selectOption('day');await expect(page.locator('.fg-schedule-access')).toContainText('同步到 Jira');
-  let bar=page.locator('.gantt_task_line[task_id="1"]'),box=await bar.boundingBox();
+  await mount(page);await auto(page);
+  // Hold the source response to deterministically exercise the scale-change loading window.
+  // The status text also matches "正在同步到 Jira", so it is not a readiness signal.
+  let releaseSource;const sourceGate=new Promise(resolve=>{releaseSource=resolve;});
+  const holdSource=async route=>{await sourceGate;await route.continue();};
+  await page.route('**/schedule/1/source',holdSource);
+  const reload=page.waitForResponse(r=>r.url().endsWith('/schedule/1/source'));
+  const sourceRequest=page.waitForRequest(r=>r.url().endsWith('/schedule/1/source'));
+  try{
+    await page.getByLabel('时间刻度').selectOption('day');await sourceRequest;
+    await expect(page.getByRole('button',{name:'自动排期',exact:true})).toBeDisabled();
+  }finally{releaseSource();}
+  await reload;await expect(page.getByRole('button',{name:'自动排期',exact:true})).toBeEnabled();
+  await page.unroute('**/schedule/1/source',holdSource);
+  let bar=page.locator('.gantt_task_line[task_id="1"]');await expect(bar).toBeVisible();let box=await bar.boundingBox();expect(box).not.toBeNull();
   await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x+box.width/2+120,box.y+box.height/2,{steps:12});await page.mouse.up();
-  await expect.poll(async()=>(await issue(page,1)).fields.customfield_10000).not.toBe('2026-10-30');await expect(page.locator('.fg-schedule-access')).toContainText('同步到 Jira');
-  bar=page.locator('.gantt_task_line[task_id="1"]');await bar.hover();box=await bar.locator('.gantt_task_drag.task_right').boundingBox();
+  await expect.poll(async()=>(await issue(page,1)).fields.customfield_10000).not.toBe('2026-10-30');await expect(page.getByRole('button',{name:'自动排期',exact:true})).toBeEnabled();
+  bar=page.locator('.gantt_task_line[task_id="1"]');await bar.hover();const handle=bar.locator('.gantt_task_drag.task_right');await expect(handle).toBeVisible();box=await handle.boundingBox();expect(box).not.toBeNull();
   await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x+box.width+82,box.y+box.height/2,{steps:12});await page.mouse.up();
-  await expect.poll(async()=>(await issue(page,1)).fields.timeoriginalestimate).not.toBe(21600);await expect(page.locator('.fg-schedule-access')).toContainText('同步到 Jira');
+  await expect.poll(async()=>(await issue(page,1)).fields.timeoriginalestimate).not.toBe(21600);await expect(page.getByRole('button',{name:'自动排期',exact:true})).toBeEnabled();
   await page.getByText('人员：全部',{exact:true}).click();await page.locator('.fg-people').getByRole('button',{name:'清空',exact:true}).click();await expect(page.locator('.gantt_task_line')).toHaveCount(0);
   await page.locator('.fg-people').getByRole('button',{name:'全选',exact:true}).click();await expect(page.locator('.gantt_task_line')).toHaveCount(2);
 });
