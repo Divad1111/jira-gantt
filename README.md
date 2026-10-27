@@ -111,6 +111,23 @@ npm --prefix frontend run test:browser
 
 图表使用 **DHTMLX Community 10.0.3 / MIT**，资源及许可证随安装包提供，运行时无需访问公网加载图表库。
 
+## GitHub 自动发布
+
+普通分支推送和 Pull Request 执行构建与测试，安装包在 Actions 运行页面的 **Artifacts → filter-gantt-gadget** 中下载；测试报告单独保存在 **test-reports**。
+
+发布版本时，先提交并推送包含此 Workflow 的代码，确认 `pom.xml` 中的项目版本，再创建并推送同名版本标签。例如项目版本为 `1.3.1` 且该标签尚未使用时：
+
+```powershell
+git tag -a v1.3.1 -m "Release 1.3.1"
+git push origin v1.3.1
+```
+
+标签必须为 `v` 加项目版本，且不能是 SNAPSHOT。所有构建、测试和包校验通过后，Workflow 自动创建对应的 GitHub Release，并附加可安装的插件 JAR 和 `SHA256SUMS.txt`。带后缀的版本（例如 `1.3.2-rc.1`）标记为预发布。
+
+已存在的 Release 会补充缺失附件，重跑时保留已有同名附件。普通分支手动运行只构建；在包含新 Workflow 的版本标签上手动运行或重跑，才会发布。此前完成的旧 Workflow 不会自动补发，已有旧标签也不要强制覆盖，应更新项目版本并发布新标签。
+
+发布使用 GitHub 自带的 `GITHUB_TOKEN`，只在发布任务授予 `contents: write` 权限，无需额外配置个人 Token。创建与附加附件使用 [GitHub CLI Release 命令](https://cli.github.com/manual/gh_release_create)。
+
 ## 更多文档
 
 - [安装、升级与回滚](docs/INSTALL.md)

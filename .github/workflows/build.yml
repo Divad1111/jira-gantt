@@ -1,10 +1,36 @@
 name: Build Jira P2 plugin
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches: ['**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Resolve plugin version and validate release tag
+        id: plugin
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os, re, xml.etree.ElementTree as ET
+          root = ET.parse('pom.xml').getroot()
+          version = root.findtext('{http://maven.apache.org/POM/4.0.0}version')
+          if not version or not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?', version):
+              raise SystemExit('Unsupported release version in pom.xml')
+          if os.environ['GITHUB_REF_TYPE'] == 'tag':
+              if os.environ['GITHUB_REF_NAME'] != 'v' + version or version.endswith('-SNAPSHOT'):
+                  raise SystemExit('Release tag must equal v<pom.xml version> and must not be a SNAPSHOT')
+          jar = f'target/filter-gantt-gadget-{version}.jar'
+          with open(os.environ['GITHUB_ENV'], 'a') as output:
+              output.write(f'PLUGIN_JAR={jar}\n')
+          PY
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -16,7 +42,8 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: mvn -B -ntp -DskipTests=false clean package
-      - run: ./scripts/verify-package.ps1
+      - name: Verify installable plugin JAR
+        run: ./scripts/verify-package.ps1 -JarPath $env:PLUGIN_JAR
         shell: pwsh
       - run: npx playwright install --with-deps chromium
         working-directory: frontend
@@ -24,10 +51,63 @@ jobs:
         working-directory: frontend
         env:
           PLAYWRIGHT_CHANNEL: chromium
+      - name: Prepare release assets
+        shell: bash
+        run: |
+          mkdir -p release-assets
+          cp "$PLUGIN_JAR" release-assets/
+          cd release-assets
+          sha256sum *.jar > SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
           name: filter-gantt-gadget
+          path: release-assets/
+          if-no-files-found: error
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
           path: |
-            target/*.jar
             target/surefire-reports/
             frontend/test-results/
+          if-no-files-found: ignore
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v') && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: release-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: filter-gantt-gadget
+          path: release-assets
+      - name: Create release or attach missing assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          cd release-assets
+          sha256sum --check SHA256SUMS.txt
+          if gh release view "$RELEASE_TAG" --json assets > release.json; then
+            for asset in *.jar SHA256SUMS.txt; do
+              if ! jq -e --arg name "$asset" '.assets | any(.name == $name)' release.json > /dev/null; then
+                gh release upload "$RELEASE_TAG" "$asset"
+              fi
+            done
+          else
+            flags=()
+            if [[ "$RELEASE_TAG" == *-* ]]; then
+              flags+=(--prerelease)
+            fi
+            gh release create "$RELEASE_TAG" *.jar SHA256SUMS.txt \
+              --verify-tag --generate-notes --title "$RELEASE_TAG" "${flags[@]}"
+          fi
