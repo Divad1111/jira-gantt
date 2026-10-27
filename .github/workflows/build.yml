@@ -2,9 +2,15 @@ name: Build Jira P2 plugin
 on:
   push:
     branches: ['**']
-    tags: ['v*']
+    tags: ['v*', '[0-9]*']
   pull_request:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: '补发已有版本标签，例如 v1.3.4；留空则按所选分支/标签构建'
+        type: string
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -12,24 +18,46 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      release_tag: ${{ steps.plugin.outputs.release_tag }}
     steps:
       - uses: actions/checkout@v4
-      - name: Resolve plugin version and validate release tag
+        with:
+          ref: ${{ inputs.release_tag && format('refs/tags/{0}', inputs.release_tag) || github.ref }}
+      - name: Resolve plugin version from release tag
         id: plugin
         shell: bash
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag || (github.ref_type == 'tag' && github.ref_name) || '' }}
         run: |
           python3 - <<'PY'
           import os, re, xml.etree.ElementTree as ET
-          root = ET.parse('pom.xml').getroot()
-          version = root.findtext('{http://maven.apache.org/POM/4.0.0}version')
-          if not version or not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?', version):
-              raise SystemExit('Unsupported release version in pom.xml')
-          if os.environ['GITHUB_REF_TYPE'] == 'tag':
-              if os.environ['GITHUB_REF_NAME'] != 'v' + version or version.endswith('-SNAPSHOT'):
-                  raise SystemExit('Release tag must equal v<pom.xml version> and must not be a SNAPSHOT')
+          namespace = 'http://maven.apache.org/POM/4.0.0'
+          tree = ET.parse('pom.xml')
+          root = tree.getroot()
+          node = root.find('{' + namespace + '}version')
+          base_version = node.text if node is not None else ''
+          tag = os.environ.get('RELEASE_TAG', '')
+          version = tag[1:] if tag.startswith('v') else tag or base_version
+          pattern = r'[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?'
+          if not version or not re.fullmatch(pattern, version):
+              raise SystemExit(f'Invalid version: tag={tag!r}, pom.xml={base_version!r}; expected 1.3.4 or v1.3.4')
+          if tag and version.upper().endswith('-SNAPSHOT'):
+              raise SystemExit(f'SNAPSHOT tags cannot be published: {tag}')
+          if node is None:
+              raise SystemExit('pom.xml is missing a project version')
+          if tag:
+              # Only modify the checked-out runner workspace, never the repository's tag.
+              node.text = version
+              ET.register_namespace('', namespace)
+              ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
+              tree.write('pom.xml', encoding='UTF-8', xml_declaration=True)
+          print(f'Release tag: {tag or "(none)"}; base version: {base_version}; build version: {version}')
           jar = f'target/filter-gantt-gadget-{version}.jar'
           with open(os.environ['GITHUB_ENV'], 'a') as output:
               output.write(f'PLUGIN_JAR={jar}\n')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f'release_tag={tag}\n')
           PY
       - uses: actions/setup-java@v4
         with:
@@ -75,12 +103,12 @@ jobs:
 
   release:
     needs: build
-    if: startsWith(github.ref, 'refs/tags/v') && github.event_name != 'pull_request'
+    if: needs.build.outputs.release_tag != '' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: write
     concurrency:
-      group: release-${{ github.ref }}
+      group: release-${{ needs.build.outputs.release_tag }}
       cancel-in-progress: false
     steps:
       - uses: actions/download-artifact@v4
@@ -92,7 +120,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_TAG: ${{ needs.build.outputs.release_tag }}
         run: |
           set -euo pipefail
           cd release-assets

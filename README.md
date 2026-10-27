@@ -115,18 +115,28 @@ npm --prefix frontend run test:browser
 
 普通分支推送和 Pull Request 执行构建与测试，安装包在 Actions 运行页面的 **Artifacts → filter-gantt-gadget** 中下载；测试报告单独保存在 **test-reports**。
 
-发布版本时，先提交并推送包含此 Workflow 的代码，确认 `pom.xml` 中的项目版本，再创建并推送同名版本标签。例如项目版本为 `1.3.1` 且该标签尚未使用时：
+发布版本时，先提交并推送代码，再创建并推送版本标签，例如：
 
 ```powershell
-git tag -a v1.3.1 -m "Release 1.3.1"
-git push origin v1.3.1
+git tag -a v1.3.4 -m "Release 1.3.4"
+git push origin v1.3.4
 ```
 
-标签必须为 `v` 加项目版本，且不能是 SNAPSHOT。所有构建、测试和包校验通过后，Workflow 自动创建对应的 GitHub Release，并附加可安装的插件 JAR 和 `SHA256SUMS.txt`。带后缀的版本（例如 `1.3.2-rc.1`）标记为预发布。
+支持 `v1.3.4` 或 `1.3.4` 格式。**发布构建以标签为版本来源**，会在构建环境中自动同步项目版本，再生成对应的插件 JAR，例如 `filter-gantt-gadget-1.3.4.jar`；无需先手改 `pom.xml`。源码中的版本文件和已有标签不会被改写。普通分支构建仍使用 `pom.xml` 版本。
 
-已存在的 Release 会补充缺失附件，重跑时保留已有同名附件。普通分支手动运行只构建；在包含新 Workflow 的版本标签上手动运行或重跑，才会发布。此前完成的旧 Workflow 不会自动补发，已有旧标签也不要强制覆盖，应更新项目版本并发布新标签。
+所有构建、测试和包校验通过后，自动创建对应 GitHub Release，并附加 JAR 和 `SHA256SUMS.txt`。带后缀的版本（例如 `1.3.4-rc.1`）标记为预发布，SNAPSHOT 标签禁止发布。已有 Release 会补充缺失附件，保留已有同名附件。
 
-发布使用 GitHub 自带的 `GITHUB_TOKEN`，只在发布任务授予 `contents: write` 权限，无需额外配置个人 Token。创建与附加附件使用 [GitHub CLI Release 命令](https://cli.github.com/manual/gh_release_create)。
+### 补发已存在的标签
+
+如果标签对应的旧 Workflow 发布失败，可在新 Workflow 提交并推送到默认分支后：
+
+1. 打开 **Actions → Build Jira P2 plugin → Run workflow**。
+2. 分支选择含有新 Workflow 的 **main**。
+3. 在 **release_tag** 中填写已有标签，例如 `v1.3.4`，再点击运行。
+
+补发会检出该标签的源码，以标签版本构建、测试并向该标签的 Release 上传附件；不会把 main 的业务源码发布到旧标签。输入标签必须已存在。留空时，选择分支只构建，选择版本标签则发布。
+
+直接重跑旧的运行仍使用旧 Workflow；请使用上述新运行入口。无需删除或强制移动已有标签。发布使用自带 `GITHUB_TOKEN`，仅发布任务授予 `contents: write`，无需额外个人 Token。
 
 ## 更多文档
 

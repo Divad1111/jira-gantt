@@ -1,0 +1,8 @@
+YAML parsed. 7 version cases passed; dependency versions unchanged; tag checkout and build-success gating checked.
+Release tag: (none); base version: 1.3.1; build version: 1.3.1; JAR path/output/dependencies verified
+Release tag: v1.3.4; base version: 1.3.1; build version: 1.3.4; JAR path/output/dependencies verified
+Release tag: 1.3.3; base version: 1.3.1; build version: 1.3.3; JAR path/output/dependencies verified
+Release tag: v1.3.4-rc.1; base version: 1.3.1; build version: 1.3.4-rc.1; JAR path/output/dependencies verified
+v1.3.4-SNAPSHOT: correctly rejected: SNAPSHOT tags cannot be published: v1.3.4-SNAPSHOT
+main: correctly rejected: Invalid version: tag='main', pom.xml='1.3.1'; expected 1.3.4 or v1.3.4
+v1.3: correctly rejected: Invalid version: tag='v1.3', pom.xml='1.3.1'; expected 1.3.4 or v1.3.4
