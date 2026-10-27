@@ -1,0 +1,187 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< com.qixia.jira:filter-gantt-gadget >-----------------
+[INFO] Building Filter Gantt Gadget 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------[ atlassian-plugin ]--------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ filter-gantt-gadget ---
+[INFO] Deleting F:\OpenSource\jira-gantt\target
+[INFO] 
+[INFO] --- exec:3.5.0:exec (npm-ci) @ filter-gantt-gadget ---
+
+added 34 packages in 10s
+[INFO] 
+[INFO] --- exec:3.5.0:exec (frontend-tests) @ filter-gantt-gadget ---
+
+> filter-gantt-gadget-frontend@1.0.0 test
+> node --test test/*.test.js
+
+✔ serial Jira pagination honors server page size and cap with exact JQL (143.4072ms)
+✔ empty pages terminate and truthfully report incomplete result (3.5327ms)
+✔ permission revoked after paging fails instead of returning stale issues (4.4867ms)
+✔ bad IDs rejected before fetch; contexts cannot escape same origin (1.4081ms)
+✔ abort cancels an in-flight query (2.2089ms)
+✔ invalid pagination offsets cannot cause infinite repeated reads (8.04ms)
+✔ inclusive same-day dates occupy one local calendar day (13.1881ms)
+✔ calendar next day preserves midnight across DST in America/New_York (1.2525ms)
+✔ DateTime converted using Jira user timezone, date-only values do not drift (85.6013ms)
+✔ missing and invalid schedules are classified without invented dates (1.347ms)
+✔ parents and dependencies only reference scheduled visible results, cycles are broken (1.9091ms)
+✔ estimate progress is clamped and missing estimates remain unknown (4.3885ms)
+✔ configuration rejects invalid caps, fields and enums; strips private keys (1.533ms)
+✔ IDs and links are strictly constrained; summaries safely escaped (1.5561ms)
+✔ only visible date metadata is selectable (1.1928ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 559.0469
+[INFO] 
+[INFO] --- exec:3.5.0:exec (frontend-build) @ filter-gantt-gadget ---
+
+> filter-gantt-gadget-frontend@1.0.0 build
+> rollup -c && node scripts/assets.mjs
+
+
+src/dashboard-item.js → dist/dashboard-item.js...
+created dist/dashboard-item.js in 7.2s
+[INFO] 
+[INFO] --- jira:9.5.2:compress-resources (default-compress-resources) @ filter-gantt-gadget ---
+[INFO] 0 js file(s) were output to target directory F:\OpenSource\jira-gantt\target\classes
+[INFO] 0 css file(s) were output to target directory F:\OpenSource\jira-gantt\target\classes
+[INFO] 2 xml file(s) were output to target directory F:\OpenSource\jira-gantt\target\classes
+Oct 26, 2026 8:20:58 PM com.google.javascript.jscomp.LoggerErrorManager println
+WARNING: F:/OpenSource/jira-gantt/target/classes/frontend/dashboard-item-min.js:6326:7: WARNING - [JSC_BAD_JSDOC_ANNOTATION] Parse error. illegal use of unknown JSDoc tag "topic"; ignoring it. Place another character before the @ to stop JSCompiler from parsing it as an annotation.
+  6326|      * @topic: 0
+               ^
+
+Oct 26, 2026 8:20:58 PM com.google.javascript.jscomp.LoggerErrorManager printSummary
+WARNING: 0 error(s), 1 warning(s)
+[INFO] 1 js file(s) were output to target directory F:\OpenSource\jira-gantt\target\classes\frontend
+[INFO] 1 css file(s) were output to target directory F:\OpenSource\jira-gantt\target\classes\frontend
+[INFO] 0 xml file(s) were output to target directory F:\OpenSource\jira-gantt\target\classes\frontend
+[INFO] 0 js file(s) were output to target directory F:\OpenSource\jira-gantt\target\classes\META-INF
+[INFO] 0 css file(s) were output to target directory F:\OpenSource\jira-gantt\target\classes\META-INF
+[INFO] 0 xml file(s) were output to target directory F:\OpenSource\jira-gantt\target\classes\META-INF
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ filter-gantt-gadget ---
+[INFO] Copying 5 resources from src\main\resources to target\classes
+[INFO] Copying 3 resources from frontend\dist to target\classes\frontend
+[INFO] Copying 3 resources from  to target\classes\META-INF
+[INFO] 
+[INFO] --- jira:9.5.2:filter-plugin-descriptor (default-filter-plugin-descriptor) @ filter-gantt-gadget ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ filter-gantt-gadget ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 8 source files with javac [debug release 17] to target\classes
+[INFO] 
+[INFO] --- jira:9.5.2:generate-rest-docs (default-generate-rest-docs) @ filter-gantt-gadget ---
+[INFO] Skipping REST documentation generation as it is not supported on Java 13 or greater
+[INFO] 
+[INFO] --- atlassian-spring-scanner:5.1.0:atlassian-spring-scanner (default) @ filter-gantt-gadget ---
+[INFO] Starting Atlassian Spring Byte Code Scanner...
+[INFO] 
+[INFO] 	(/) The following directory will be scanned for annotations:
+[INFO] 		file:/F:/OpenSource/jira-gantt/target/classes/
+[INFO] 
+[INFO] 	Analysis ran in 480 ms.
+[INFO] 	Encountered 8 total classes
+[INFO] 	Processed 4 annotated classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ filter-gantt-gadget ---
+[INFO] skip non existing resourceDirectory F:\OpenSource\jira-gantt\src\test\resources
+[INFO] 
+[INFO] --- jira:9.5.2:filter-test-plugin-descriptor (default-filter-test-plugin-descriptor) @ filter-gantt-gadget ---
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ filter-gantt-gadget ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 6 source files with javac [debug release 17] to target\test-classes
+[INFO] 
+[INFO] --- jira:9.5.2:unit-test (default-unit-test) @ filter-gantt-gadget ---
+[INFO] Surefire 3.2.5 test configuration:
+[INFO] <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <systemPropertyVariables/>
+  <excludes>
+    <exclude>%regex[it[/\\].*]</exclude>
+    <exclude>**/*$*</exclude>
+  </excludes>
+  <excludedGroups/>
+</configuration>
+[INFO] Using auto detected provider org.apache.maven.surefire.junit4.JUnit4Provider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.qixia.jira.filtergantt.AccessGuardTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.225 s -- in com.qixia.jira.filtergantt.AccessGuardTest
+[INFO] Running com.qixia.jira.filtergantt.PersonalPreferenceStoreTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.286 s -- in com.qixia.jira.filtergantt.PersonalPreferenceStoreTest
+[INFO] Running com.qixia.jira.filtergantt.PreferenceIdentityTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 s -- in com.qixia.jira.filtergantt.PreferenceIdentityTest
+[INFO] Running com.qixia.jira.filtergantt.rest.FilterResourceTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.349 s -- in com.qixia.jira.filtergantt.rest.FilterResourceTest
+[INFO] Running com.qixia.jira.filtergantt.rest.PersonalResourceTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.256 s -- in com.qixia.jira.filtergantt.rest.PersonalResourceTest
+[INFO] Running com.qixia.jira.filtergantt.WriteProtectionTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in com.qixia.jira.filtergantt.WriteProtectionTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 33, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jira:9.5.2:post-process-resources (default-post-process-resources) @ filter-gantt-gadget ---
+[INFO] 
+[INFO] --- jira:9.5.2:validate-banned-dependencies (default-validate-banned-dependencies) @ filter-gantt-gadget ---
+[INFO] Dependencies excluded from banning: []
+[INFO] Scanning using platform version range: '[0,)'
+[INFO] No banned dependencies found!
+[INFO] 
+[INFO] --- jira:9.5.2:copy-fe-bundled-metadata (default-copy-fe-bundled-metadata) @ filter-gantt-gadget ---
+[INFO] Skipped copying bundled frontend metadata
+[INFO] 
+[INFO] --- jira:9.5.2:copy-fe-module-manifests (default-copy-fe-module-manifests) @ filter-gantt-gadget ---
+[INFO] There were no frontend module manifest files specified to include in the artifact
+[INFO] 
+[INFO] --- jira:9.5.2:report-fe-manifest-associations (default-report-fe-manifest-associations) @ filter-gantt-gadget ---
+[INFO] There were no frontend manifest associations found. Skipping generating final mapping.
+[INFO] There were no frontend dependency declarations found. Skipping generating final mapping.
+[INFO] 
+[INFO] --- jira:9.5.2:generate-manifest (default-generate-manifest) @ filter-gantt-gadget ---
+[INFO] Generating a manifest for this plugin
+[INFO] using maven-bundle-plugin v5.1.9
+[INFO] No MANIFEST.MF file found, generating manifest.
+[INFO] Writing manifest: F:\OpenSource\jira-gantt\target\classes\META-INF\MANIFEST.MF
+[INFO] 
+[INFO] --- jira:9.5.2:generate-test-manifest (default-generate-test-manifest) @ filter-gantt-gadget ---
+[INFO] 
+[INFO] --- jira:9.5.2:validate-manifest (default-validate-manifest) @ filter-gantt-gadget ---
+[INFO] Manifest found, validating...
+[INFO] Manifest validated
+[INFO] 
+[INFO] --- jira:9.5.2:jar (default-jar) @ filter-gantt-gadget ---
+[INFO] Building jar: F:\OpenSource\jira-gantt\target\filter-gantt-gadget-1.0.0.jar
+[INFO] 
+[INFO] --- jira:9.5.2:generate-obr-artifact (default-generate-obr-artifact) @ filter-gantt-gadget ---
+[INFO] the file name is: filter-gantt-gadget-1.0.0
+[INFO] using maven-bundle-plugin v5.1.9
+[INFO] Writing OBR metadata
+[INFO] Installing filter-gantt-gadget-1.0.0.jar
+[INFO] Writing OBR metadata
+[INFO] Building jar: F:\OpenSource\jira-gantt\target\filter-gantt-gadget-1.0.0.obr
+[INFO] 
+[INFO] --- jira:9.5.2:validate-test-manifest (default-validate-test-manifest) @ filter-gantt-gadget ---
+[INFO] 
+[INFO] --- jira:9.5.2:test-jar (default-test-jar) @ filter-gantt-gadget ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:53 min
+[INFO] Finished at: 2026-10-26T20:21:45+08:00
+[INFO] ------------------------------------------------------------------------

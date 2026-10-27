@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlassian-plugin key="${atlassian.plugin.key}" name="Filter Gantt Gadget" plugins-version="2">
+  <plugin-info>
+    <description>Read-only Saved Filter Gantt with private viewer preferences.</description>
+    <version>${project.version}</version><vendor name="Qixia"/>
+    <param name="atlassian-data-center-status">compatible</param>
+  </plugin-info>
+  <resource type="i18n" name="i18n" location="filter-gantt"/>
+  <web-resource key="filter-gantt-resources" name="Filter Gantt resources">
+    <dependency>com.atlassian.auiplugin:ajs</dependency>
+    <dependency>com.atlassian.plugins.webresource:context-path</dependency>
+    <transformation extension="soy"><transformer key="soyTransformer"/></transformation>
+    <resource type="download" name="filter-gantt-soy.js" location="soy/filter-gantt.soy"/>
+    <resource type="download" name="filter-gantt.css" location="frontend/filter-gantt.css"/>
+    <resource type="download" name="dashboard-item.js" location="frontend/dashboard-item.js"/>
+    <context>jira.dashboard</context>
+  </web-resource>
+  <dashboard-item key="filter-gantt-dashboard-item" i18n-name-key="filtergantt.title" configurable="true">
+    <definition><title key="filtergantt.title"/><categories><category>Chart</category></categories><author><name>Qixia</name></author></definition>
+    <description key="filtergantt.description"/>
+    <resource name="view" type="soy" location=":filter-gantt-resources/FilterGantt.Templates.Root"/>
+    <amd-module>filter-gantt/dashboard-item</amd-module>
+    <condition class="com.qixia.jira.filtergantt.LoggedInCondition"/>
+  </dashboard-item>
+  <rest key="filter-gantt-rest" path="/filter-gantt" version="1.0"><description>Private preferences and permission-aware filter search.</description></rest>
+  <rest-migration key="filter-gantt-rest-v2"><rest-v2/></rest-migration>
+  <ao key="filter-gantt-ao" namespace="filter-gantt">
+    <entity>com.qixia.jira.filtergantt.ao.PersonalGanttPreference</entity>
+  </ao>
+</atlassian-plugin>

@@ -1,0 +1,38 @@
+[
+  {
+    "Name": "com.qixia.jira.filtergantt.AccessGuardTest",
+    "Tests": 8,
+    "Errors": 0,
+    "Failures": 0
+  },
+  {
+    "Name": "com.qixia.jira.filtergantt.PersonalPreferenceStoreTest",
+    "Tests": 5,
+    "Errors": 0,
+    "Failures": 0
+  },
+  {
+    "Name": "com.qixia.jira.filtergantt.PreferenceIdentityTest",
+    "Tests": 2,
+    "Errors": 0,
+    "Failures": 0
+  },
+  {
+    "Name": "com.qixia.jira.filtergantt.rest.FilterResourceTest",
+    "Tests": 5,
+    "Errors": 0,
+    "Failures": 0
+  },
+  {
+    "Name": "com.qixia.jira.filtergantt.rest.PersonalResourceTest",
+    "Tests": 9,
+    "Errors": 0,
+    "Failures": 0
+  },
+  {
+    "Name": "com.qixia.jira.filtergantt.WriteProtectionTest",
+    "Tests": 4,
+    "Errors": 0,
+    "Failures": 0
+  }
+]

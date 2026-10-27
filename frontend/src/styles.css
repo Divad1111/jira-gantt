@@ -1,0 +1,47 @@
+.filter-gantt { --fg-border: #dfe1e6; color: #172b4d; background: #fff; font: 13px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif; padding: 10px; box-sizing: border-box; min-width: 0; }
+.filter-gantt *, .filter-gantt *::before, .filter-gantt *::after { box-sizing: border-box; }
+.filter-gantt [hidden] { display: none !important; }
+.filter-gantt button, .filter-gantt select, .filter-gantt input { font: inherit; color: inherit; border: 1px solid #b3bac5; background: #fff; border-radius: 4px; padding: 5px 8px; min-height: 30px; max-width: 100%; }
+.filter-gantt button { cursor: pointer; }
+.filter-gantt button:hover { background: #f4f5f7; }
+.filter-gantt button:disabled { opacity: .5; cursor: default; }
+.filter-gantt :focus-visible { outline: 2px solid #0052cc; outline-offset: 2px; }
+.filter-gantt a { color: #0052cc; }
+.filter-gantt .fg-toolbar, .filter-gantt .fg-actions, .filter-gantt .fg-picker-search, .filter-gantt .fg-picker-footer { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.filter-gantt .fg-filter-name { flex: 1 1 150px; font-weight: 600; overflow-wrap: anywhere; }
+.filter-gantt .fg-summary, .filter-gantt .fg-help { color: #5e6c84; }
+.filter-gantt .fg-summary { margin: 10px 0; }
+.filter-gantt .fg-error, .filter-gantt .fg-warning { padding: 10px; border-radius: 4px; background: #fff4e5; color: #7f4b00; overflow-wrap: anywhere; }
+.filter-gantt .fg-error { background: #ffebe6; color: #bf2600; }
+.filter-gantt .fg-chart { width: 100%; min-width: 0; border: 1px solid var(--fg-border); }
+.filter-gantt .fg-task-details { padding: 10px 0; color: #5e6c84; }
+.filter-gantt .fg-detail { display: flex; flex-wrap: wrap; gap: 6px 12px; }
+.filter-gantt details { margin: 10px 0; border: 1px solid var(--fg-border); border-radius: 4px; padding: 8px; }
+.filter-gantt summary { cursor: pointer; font-weight: 600; }
+.filter-gantt .fg-issue-list ul { max-height: 260px; overflow: auto; padding-left: 22px; }
+.filter-gantt .fg-issue-list li { padding: 4px 0; overflow-wrap: anywhere; }
+.filter-gantt .fg-select-panel { margin-top: 10px; max-width: 560px; }
+.filter-gantt .fg-picker { min-width: 0; position: relative; width: 100%; }
+.filter-gantt .fg-picker > input { width: 100%; padding-right: 28px; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%235e6c84' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 10px center; }
+.filter-gantt .fg-picker-panel { margin-top: 4px; border: 1px solid #b3bac5; border-radius: 4px; padding: 4px; box-shadow: 0 4px 8px #091e4220; }
+.filter-gantt .fg-picker [role=listbox] { max-height: 220px; overflow-y: auto; }
+.filter-gantt .fg-picker [role=option] { display: block; width: 100%; text-align: left; border: 0; border-radius: 2px; padding: 6px 8px; overflow-wrap: anywhere; }
+.filter-gantt .fg-picker [role=option] small { display: block; color: #5e6c84; }
+.filter-gantt .fg-picker [aria-selected=true], .filter-gantt .fg-picker .fg-active { background: #deebff; }
+.filter-gantt .fg-picker-status { color: #5e6c84; }
+.filter-gantt .fg-config { display: grid; gap: 12px; }
+.filter-gantt .fg-field { display: grid; grid-template-columns: minmax(110px, 30%) 1fr; align-items: center; gap: 10px; }
+.filter-gantt .fg-field input[type=checkbox] { justify-self: start; }
+.filter-gantt fieldset { border: 1px solid var(--fg-border); padding: 10px; min-width: 0; }
+.filter-gantt .fg-primary { background: #0052cc; color: #fff; border-color: #0052cc; }
+.filter-gantt .fg-primary:hover { background: #0747a6; }
+.filter-gantt .fg-weekend { background: #f7f8fa; }
+.filter-gantt .fg-status-new { background: #6b778c; border-color: #505f79; }
+.filter-gantt .fg-status-indeterminate { background: #2684ff; border-color: #0065ff; }
+.filter-gantt .fg-status-done { background: #36b37e; border-color: #00875a; }
+.filter-gantt .fg-status-undefined { background: #8777d9; border-color: #6554c0; }
+.filter-gantt .fg-no-progress .gantt_task_progress, .filter-gantt .fg-no-progress .gantt_task_progress_wrapper { display: none; }
+.filter-gantt .fg-today { background: #de350b; opacity: .8; }
+.filter-gantt .gantt_marker .gantt_marker_content { background: #de350b; }
+.filter-gantt .fg-today-marker { position: absolute; top: 0; width: 2px; background: #de350b; opacity: .7; z-index: 2; pointer-events: none; }
+@media (max-width: 560px) { .filter-gantt .fg-field { grid-template-columns: 1fr; gap: 3px; } }

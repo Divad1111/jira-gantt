@@ -1,0 +1,31 @@
+
+> filter-gantt-gadget-frontend@1.0.0 test:browser
+> playwright test
+
+[WebServer] (node:21376) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 15 tests using 1 worker
+
+(node:51912) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:51912) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 test\browser\gadget.spec.js:18:1 › three real Community Gantt instances render, isolate zoom, escape XSS and destroy cleanly (2.4s)
+  ok  2 test\browser\gadget.spec.js:41:1 › A and B personal views persist independently on the same shared gadget and across browser contexts (4.0s)
+  ok  3 test\browser\gadget.spec.js:81:1 › revoked permission clears all old chart data and names (1.2s)
+  ok  4 test\browser\gadget.spec.js:97:1 › viewer cannot configure shared preferences but can choose personal filter; fixed mode has no picker (1.2s)
+  ok  5 test\browser\gadget.spec.js:125:1 › shared config saves only allowlisted instance fields and root context path works (1.3s)
+  ok  6 test\browser\gadget.spec.js:144:1 › readonly chart does not open a lightbox or issue write request (1.1s)
+  ok  7 test\browser\gadget.spec.js:161:1 › mock visual capture (1.5s)
+  ok  8 test\browser\gadget.spec.js:170:1 › rapid personal changes persist the newest choice in order (2.0s)
+  ok  9 test\browser\gadget.spec.js:188:1 › 1000 issue cap is enforced for 1200 results (1.2s)
+MOCK_PERF five gadgets × 500 issues: 1218 ms (local Chrome/mock REST)
+  ok 10 test\browser\gadget.spec.js:200:1 › five gadgets with 500 issues remain isolated and render without errors (1.8s)
+  ok 11 test\browser\gadget.spec.js:214:1 › manual refresh recovers after failed personal save (1.0s)
+  ok 12 test\browser\gadget.spec.js:235:1 › removed date field is detected on refresh and old tasks disappear (838ms)
+  ok 13 test\browser\gadget.spec.js:251:1 › boolean configured flag loads saved filter and false still shows setup hint (969ms)
+  ok 14 test\browser\gadget.spec.js:272:1 › single dropdown searches, deduplicates and applies a shared default after saving (1.9s)
+  ok 15 test\browser\gadget.spec.js:302:1 › picker supports keyboard, empty search, reset and failed search (2.5s)
+
+  15 passed (33.8s)

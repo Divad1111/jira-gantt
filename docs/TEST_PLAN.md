@@ -1,0 +1,27 @@
+# 测试计划与验证边界
+
+## 可执行自动化
+
+- `npm --prefix frontend test`：配置白名单、日期/用户时区、23/25 小时夏令时日、包含式结束日、缺失/无效日期、父子环、依赖方向、估算、XSS 转义、同源路径、严格 ID、串行分页/截断/空页/取消/权限撤销。
+- `mvn -B -DskipTests=false clean package`：完整前端构建、Java 编译、JUnit 权限与 REST 测试、P2/OSGi 打包。
+- `npm --prefix frontend run test:browser`：真实锁定 Community 版在无界面 Chrome 中运行；三个独立实例、缩放、销毁、A/B 会话个人偏好、重新打开/新浏览器保持、只读、XSS、权限错误清空、配置保存、根路径和 `/jira`。
+
+浏览器测试使用本地模拟 Jira REST/AO 合同，不代表真实 Jira ACL、UPM 或 AO 数据库验证。Java 测试使用官方 10.3.18 API 加服务 mock，不代表集群或真实安装验证。
+
+## 必须在 Jira 10.3.18 补做
+
+设计文档 TC-01 至 TC-22 是正式验收基线。测试数据至少包含 admin/A/B、两个 Browse 权限不同的项目、A/B 私有及双方共享 Filter、两个 Dashboard、三个 Gadget、Issue Security 和跨月/DST/异常日期任务。
+
+1. UPM 安装、启用、禁用、卸载和重装；确认目录、Soy、AMD、REST v2、安全注解、Spring 服务导入、AO migration 均正常，记录每个节点启动日志。
+2. 对照 PortletConfiguration 验证 getGadgetId；跨 Dashboard 和非本插件 Gadget 的偏好 GET/PUT/DELETE 均拒绝。A 不得读取/覆盖 B 的个人视图，不得向请求注入 userKey。
+3. 仅有共享 Dashboard 浏览权限的 B 可以修改自己的视图；不能保存共享配置；固定模式不能 PUT 私有覆盖。
+4. 私有 Filter 与 currentUser() JQL 在实际查看者身份下求值。撤销 Filter、Browse、Issue Security 后刷新必须移除旧内容。匿名/停用/无许可/Session 失效不得显示数据。
+5. 正负 XSRF 测试：同源 JSON 成功；跨源、无头、简单表单、伪造 no-check、不同 host/port 失败。反向代理 root 与 `/jira` 均正确，确认本地策略是否另要求 Jira XSRF token。
+6. 两个浏览器/两用户/两个节点同时写个人偏好，确认唯一键生效、集群锁有效，无重复行；节点切换后状态一致。真实 AO 创建、重复 enable/migrate、升级与回滚不丢数据。
+7. 在实际办公 PC 测量 100/500/1000 Issue、1/3/5 个 Gadget 的首屏时间、长任务、内存与请求数。不要把 mock 的速度当作生产指标。
+8. 验证日期字段的项目上下文、自定义 Date/DateTime schema、Jira 用户时区、CSP、代理和中文/英文/Linux/Windows 浏览器表现。
+9. 同一 Gadget 连续切换筛选器、缩放、刷新、保存失败和网络超时；旧请求不得恢复旧数据、重复实例或写回旧选择。
+
+## 当前结论
+
+精确通过数、构建产物与 SHA-256 记录在 `DELIVERY.md`。没有连接到 Jira 10.3.18 测试实例时，结论必须为：**尚未通过真实 10.3.18 安装验证**。不将 mock、编译成功或 API 签名核验等同于兼容认证。

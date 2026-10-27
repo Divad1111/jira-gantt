@@ -1,0 +1,28 @@
+
+> filter-gantt-gadget-frontend@1.0.0 test:browser
+> playwright test
+
+[WebServer] (node:8064) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:28412) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28412) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 test\browser\gadget.spec.js:18:1 › three real Community Gantt instances render, isolate zoom, escape XSS and destroy cleanly (4.3s)
+  ok  2 test\browser\gadget.spec.js:41:1 › A and B personal views persist independently on the same shared gadget and across browser contexts (7.4s)
+  ok  3 test\browser\gadget.spec.js:78:1 › revoked permission clears all old chart data and names (3.6s)
+  ok  4 test\browser\gadget.spec.js:94:1 › viewer cannot configure shared preferences but can choose personal filter; fixed mode has no picker (2.3s)
+  ok  5 test\browser\gadget.spec.js:121:1 › shared config saves only allowlisted instance fields and root context path works (2.4s)
+  ok  6 test\browser\gadget.spec.js:140:1 › readonly chart does not open a lightbox or issue write request (2.4s)
+  ok  7 test\browser\gadget.spec.js:157:1 › mock visual capture (8.4s)
+  ok  8 test\browser\gadget.spec.js:166:1 › rapid personal changes persist the newest choice in order (2.8s)
+  ok  9 test\browser\gadget.spec.js:184:1 › 1000 issue cap is enforced for 1200 results (2.0s)
+MOCK_PERF five gadgets × 500 issues: 2010 ms (local Chrome/mock REST)
+  ok 10 test\browser\gadget.spec.js:196:1 › five gadgets with 500 issues remain isolated and render without errors (2.7s)
+  ok 11 test\browser\gadget.spec.js:210:1 › manual refresh recovers after failed personal save (1.8s)
+  ok 12 test\browser\gadget.spec.js:231:1 › removed date field is detected on refresh and old tasks disappear (1.6s)
+
+  12 passed (1.1m)
